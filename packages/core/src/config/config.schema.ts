@@ -237,6 +237,17 @@ const categorySchema = object({
 export const categorySchemaDefaults = categorySchema.parse({})
 export type CategoryConfig = z.input<typeof categorySchema>
 
+export const groupChangeSchema = object({
+  /**
+   * A regular expression literal, such as `/^Bump (?<group>.+) from (?<from>\S+) to (?<to>\S+)$/`, matched against the pull request title. A `group` capture group is required and holds the value changes are grouped by.
+   */
+  pattern: string().min(1),
+  /**
+   * The template to use for `$TITLE` of a merged entry. Expands `$GROUP` and, for every other capture group, `$FIRST_<NAME>` and `$LAST_<NAME>`.
+   */
+  'title-template': string().min(1),
+})
+
 export const exclusiveConfigSchema = object({
   /**
    * The template to use for each merged change.
@@ -256,6 +267,10 @@ export const exclusiveConfigSchema = object({
    * An optional separator to use before the final author in `$AUTHORS`.
    */
   'change-authors-final-separator': string().optional(),
+  /**
+   * The separator to use between pull request numbers in `$NUMBERS`.
+   */
+  'change-numbers-separator': string().optional().default(','),
   /**
    * Characters to escape in `$TITLE` when inserting into `change-template` so that they are not interpreted as Markdown format characters.
    */
@@ -358,6 +373,11 @@ export const exclusiveConfigSchema = object({
   )
     .optional()
     .default([]),
+
+  /**
+   * Merge changes whose titles match the same `group` into a single changelog entry.
+   */
+  'group-changes': array(groupChangeSchema).optional().default([]),
 
   /**
    * Categorize changes

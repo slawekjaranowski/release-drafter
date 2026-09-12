@@ -240,6 +240,13 @@ export interface ParsedReplacer {
   replace: string
 }
 
+export interface ParsedGroupChange {
+  pattern: RegExp
+  'title-template': string
+  /** Names of the capture groups exposed as `$FIRST_<NAME>` and `$LAST_<NAME>`, without `group`. */
+  captureNames: string[]
+}
+
 /**
  * Fully parsed Release Drafter configuration for the orchestration core. The
  * caller or runtime must load and normalize the configuration.
@@ -249,6 +256,7 @@ export interface DraftReleaseConfig {
   'change-author-template': string
   'change-authors-separator': string
   'change-authors-final-separator'?: string
+  'change-numbers-separator'?: string
   'change-title-escapes'?: string
   'no-changes-template': string
   'version-template': string
@@ -265,6 +273,7 @@ export interface DraftReleaseConfig {
   'pull-request-limit': number
   'history-limit': number
   replacers: ParsedReplacer[]
+  'group-changes'?: ParsedGroupChange[]
   categories: ParsedCategory[]
   'category-template': string
   template: string

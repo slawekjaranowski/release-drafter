@@ -55,6 +55,10 @@
     "change-authors-final-separator": {
       "type": "string"
     },
+    "change-numbers-separator": {
+      "default": ",",
+      "type": "string"
+    },
     "change-title-escapes": {
       "type": "string"
     },
@@ -164,6 +168,24 @@
           }
         },
         "required": ["search", "replace"]
+      }
+    },
+    "group-changes": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pattern": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title-template": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": ["pattern", "title-template"]
       }
     },
     "categories": {
